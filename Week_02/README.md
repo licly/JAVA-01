@@ -1,1 +1,2 @@
-学习笔记
+使用压测工具测echo程序时，echo程序报connection reset，原因在于压测工具发起的是http请求，echo程序收到请求时会响应一个和请求数据相同的数据。压测工具收到响应数据发现不是http响应格式数据，就会关闭连接，echo程序再读数据时就会抛出connection reset异常。
+如果是使用tcp方式访问就不会出现这种情况。比如用telnet测试
