@@ -10,6 +10,9 @@
 
     <properties>
         <netty.version>4.1.58.Final</netty.version>
+        <common-lang.version>3.11</common-lang.version>
+        <http-client.version>4.5.13</http-client.version>
+        <http-async-client.version>4.1.4</http-async-client.version>
     </properties>
 
     <dependencies>
@@ -18,8 +21,22 @@
             <artifactId>netty-all</artifactId>
             <version>${netty.version}</version>
         </dependency>
-
-    </dependencies>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${common-lang.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${http-client.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpasyncclient</artifactId>
+			<version>${http-async-client.version}</version>
+		</dependency>
+	</dependencies>
 
     <build>
         <plugins>

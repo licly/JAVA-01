@@ -1,6 +1,7 @@
 package org.charlie.gateway.outbound;
 
 import io.netty.channel.ChannelOutboundHandlerAdapter;
+import io.netty.handler.codec.http.FullHttpRequest;
 
 /**
  * 出站处理器
@@ -8,9 +9,7 @@ import io.netty.channel.ChannelOutboundHandlerAdapter;
  * @author Charlie
  * @date 2021/1/24
  */
-public class HttpOutboundHandler extends ChannelOutboundHandlerAdapter {
+public interface HttpOutboundHandler {
 
-    public void handle() {
-
-    }
+    void handle(FullHttpRequest request);
 }

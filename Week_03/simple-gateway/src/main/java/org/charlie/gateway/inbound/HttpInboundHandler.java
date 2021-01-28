@@ -3,6 +3,7 @@ package org.charlie.gateway.inbound;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.FullHttpRequest;
+import org.charlie.gateway.filter.HttpRequestFilter;
 import org.charlie.gateway.outbound.HttpOutboundHandler;
 
 /**
@@ -16,14 +17,19 @@ public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
 
     private HttpOutboundHandler httpOutboundHandler;
 
-    public HttpInboundHandler(HttpOutboundHandler httpOutboundHandler) {
+    private HttpRequestFilter filter;
+
+    public HttpInboundHandler(HttpOutboundHandler httpOutboundHandler,
+                              HttpRequestFilter filter) {
         this.httpOutboundHandler = httpOutboundHandler;
+        this.filter = filter;
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         FullHttpRequest request = (FullHttpRequest) msg;
-        httpOutboundHandler.handle();
+    	filter.filter(request, ctx);
+        httpOutboundHandler.handle(request);
     }
 
     @Override

@@ -6,7 +6,9 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import org.charlie.gateway.config.GatewayEnvironment;
 import org.charlie.gateway.inbound.HttpInboundInitializer;
+import org.charlie.gateway.outbound.HttpOutboundHandlerFactory;
 
 /**
  * 启动类
@@ -23,10 +25,12 @@ public class SimpleGatewayApplication {
         bootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
                 .handler(new LoggingHandler(LogLevel.DEBUG))
-                .childHandler(new HttpInboundInitializer());
+                .childHandler(new HttpInboundInitializer(new HttpOutboundHandlerFactory()));
 
         try {
-            Channel channel = bootstrap.bind(8888).sync().channel();
+            Channel channel = bootstrap
+		            .bind(Integer.parseInt(GatewayEnvironment.getProperty("server.port")))
+		            .sync().channel();
             channel.closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
