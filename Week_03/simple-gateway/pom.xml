@@ -13,6 +13,7 @@
         <common-lang.version>3.11</common-lang.version>
         <http-client.version>4.5.13</http-client.version>
         <http-async-client.version>4.1.4</http-async-client.version>
+        <guava.version>30.1-jre</guava.version>
     </properties>
 
     <dependencies>
@@ -36,6 +37,12 @@
 			<artifactId>httpasyncclient</artifactId>
 			<version>${http-async-client.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
+		</dependency>
+
 	</dependencies>
 
     <build>

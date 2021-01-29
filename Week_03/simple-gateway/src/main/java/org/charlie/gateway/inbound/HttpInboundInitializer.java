@@ -1,13 +1,12 @@
 package org.charlie.gateway.inbound;
 
+import com.google.common.collect.Lists;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
-import org.charlie.gateway.outbound.HttpOutboundHandler;
+import org.charlie.gateway.filter.HeaderHttpRequestFilter;
 import org.charlie.gateway.outbound.HttpOutboundHandlerFactory;
-import org.charlie.gateway.outbound.HttpOutboundNettyHandler;
 
 /**
  * TODO
@@ -30,6 +29,8 @@ public class HttpInboundInitializer extends ChannelInitializer<SocketChannel> {
                 .addLast(new HttpServerCodec())
                 // 处理数据在Body中的请求
                 .addLast(new HttpObjectAggregator(1024 * 1024))
-                .addLast(new HttpInboundHandler(hohFactory.getHttpOutboundHandler()));
+                .addLast(new HttpInboundHandler(
+                				hohFactory.getHttpOutboundHandler(),
+		                        Lists.newArrayList(new HeaderHttpRequestFilter())));
     }
 }

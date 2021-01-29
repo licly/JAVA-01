@@ -13,6 +13,6 @@ public class HeaderHttpRequestFilter implements HttpRequestFilter {
 
 	@Override
 	public void filter(FullHttpRequest request, ChannelHandlerContext ctx) {
-		request.headers().set("name", "charlie");
+		request.headers().set("request", "request");
 	}
 }

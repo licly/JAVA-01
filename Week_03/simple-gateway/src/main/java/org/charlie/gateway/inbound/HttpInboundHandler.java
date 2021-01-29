@@ -6,6 +6,8 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import org.charlie.gateway.filter.HttpRequestFilter;
 import org.charlie.gateway.outbound.HttpOutboundHandler;
 
+import java.util.List;
+
 /**
  * 入站处理器
  *
@@ -17,19 +19,19 @@ public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
 
     private HttpOutboundHandler httpOutboundHandler;
 
-    private HttpRequestFilter filter;
+    private List<HttpRequestFilter> filters;
 
     public HttpInboundHandler(HttpOutboundHandler httpOutboundHandler,
-                              HttpRequestFilter filter) {
+                              List<HttpRequestFilter> filters) {
         this.httpOutboundHandler = httpOutboundHandler;
-        this.filter = filter;
+        this.filters = filters;
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         FullHttpRequest request = (FullHttpRequest) msg;
-    	filter.filter(request, ctx);
-        httpOutboundHandler.handle(request);
+	    filters.forEach(filter -> filter.filter(request, ctx));
+        httpOutboundHandler.handle(request, ctx);
     }
 
     @Override

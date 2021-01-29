@@ -1,6 +1,6 @@
 package org.charlie.gateway.outbound;
 
-import io.netty.channel.ChannelOutboundHandlerAdapter;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
 
 /**
@@ -11,5 +11,6 @@ import io.netty.handler.codec.http.FullHttpRequest;
  */
 public interface HttpOutboundHandler {
 
-    void handle(FullHttpRequest request);
+    void handle(FullHttpRequest request, ChannelHandlerContext ctx);
+
 }
