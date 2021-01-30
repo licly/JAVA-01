@@ -1,7 +1,7 @@
 package org.charlie.gateway.outbound;
 
 import com.google.common.collect.Lists;
-import org.charlie.gateway.config.GatewayEnvironment;
+import org.charlie.gateway.config.Environment;
 import org.charlie.gateway.filter.HeaderHttpResponseFilter;
 import org.charlie.gateway.outbound.httpclient.HttpOutboundHttpClientHandler;
 import org.charlie.gateway.outbound.netty.HttpOutboundNettyHandler;
@@ -15,7 +15,7 @@ import org.charlie.gateway.outbound.netty.HttpOutboundNettyHandler;
 public class HttpOutboundHandlerFactory {
 
 	public HttpOutboundHandler getHttpOutboundHandler() {
-		if ("netty".equals(GatewayEnvironment.getProperty("outbound.handler"))) {
+		if ("netty".equals(Environment.getProperty("outbound.handler"))) {
 			return new HttpOutboundNettyHandler(Lists.newArrayList(new HeaderHttpResponseFilter()));
 		} else {
 			return new HttpOutboundHttpClientHandler(Lists.newArrayList(new HeaderHttpResponseFilter()));

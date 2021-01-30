@@ -15,8 +15,10 @@ import org.charlie.gateway.outbound.HttpOutboundHandler;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.charlie.gateway.config.Environment.getProperty;
+
 /**
- * 出站处理器Netty实现
+ * 出站处理器Netty实现（未完成，逻辑尚未理通）
  *
  * @author Charlie
  * @date 2021/1/27
@@ -41,16 +43,26 @@ public class HttpOutboundNettyHandler
 
 	private void doGet(FullHttpRequest request, ChannelHandlerContext ctx, String url) {
 		EventLoopGroup workerGroup = new NioEventLoopGroup();
-		Bootstrap b = new Bootstrap();
-		b.group(workerGroup).channel(NioSocketChannel.class)
-				.option(ChannelOption.SO_KEEPALIVE, true)
-				.handler(new ChannelInitializer<SocketChannel>() {
+		try {
+			Bootstrap b = new Bootstrap();
+			b.group(workerGroup).channel(NioSocketChannel.class)
+					.remoteAddress("localhost", 8088)
+					.option(ChannelOption.SO_KEEPALIVE, true)
+					.handler(new ChannelInitializer<SocketChannel>() {
+						@Override
+						protected void initChannel(SocketChannel ch) throws Exception {
+							ch.pipeline().addLast(new HttpResponseDecoder())
+									.addLast(new HttpRequestEncoder()).addLast();
+						}
+			});
 
-			@Override
-			protected void initChannel(SocketChannel ch) throws Exception {
-				ch.pipeline().addLast(new HttpResponseDecoder())
-						.addLast(new HttpRequestEncoder()).addLast();
-			}
-		});
+			ChannelFuture future = b.connect().sync();
+			future.channel().closeFuture().sync();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} finally {
+			workerGroup.shutdownGracefully();
+		}
+
 	}
 }

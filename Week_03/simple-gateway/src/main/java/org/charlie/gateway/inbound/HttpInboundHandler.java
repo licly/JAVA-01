@@ -31,7 +31,12 @@ public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         FullHttpRequest request = (FullHttpRequest) msg;
 	    filters.forEach(filter -> filter.filter(request, ctx));
-        httpOutboundHandler.handle(request, ctx);
+	    try {
+		    httpOutboundHandler.handle(request, ctx);
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+		    ctx.close();
+	    }
     }
 
     @Override

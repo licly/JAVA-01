@@ -3,7 +3,6 @@ package org.charlie.gateway.outbound.httpclient;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.handler.codec.http.*;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -31,7 +30,6 @@ import static io.netty.handler.codec.http.HttpVersion.*;
  * @date 2021/1/27
  */
 public class HttpOutboundHttpClientHandler
-		extends ChannelOutboundHandlerAdapter
 		implements HttpOutboundHandler {
 
 	private CloseableHttpAsyncClient client;
@@ -74,6 +72,7 @@ public class HttpOutboundHttpClientHandler
 
 	private void doGet(FullHttpRequest request, ChannelHandlerContext ctx, String url) {
 		HttpGet get = new HttpGet(url);
+		client.start();
 		client.execute(get, new FutureCallback<HttpResponse>() {
 			@Override
 			public void completed(HttpResponse response) {
@@ -83,12 +82,14 @@ public class HttpOutboundHttpClientHandler
 			@Override
 			public void failed(Exception ex) {
 				get.abort();
+				ctx.close();
 				ex.printStackTrace();
 			}
 
 			@Override
 			public void cancelled() {
 				get.abort();
+				ctx.close();
 			}
 		});
 	}
@@ -138,7 +139,7 @@ public class HttpOutboundHttpClientHandler
 		@Override
 		public Thread newThread(Runnable r) {
 			Thread t = new Thread(group, r,
-					namePrefix + threadNumber.getAndIncrement() + "-thread-");
+					namePrefix + "-thread-" + threadNumber.getAndIncrement());
 			t.setDaemon(false);
 			return t;
 		}

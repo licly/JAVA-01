@@ -9,7 +9,7 @@ import java.util.*;
  * @author Charlie
  * @date 2021/1/27
  */
-public class GatewayEnvironment {
+public class Environment {
 
 	private final static Properties resource = new Properties();
 
@@ -22,7 +22,7 @@ public class GatewayEnvironment {
 
 	static {
 		try {
-			resource.load(GatewayEnvironment.class.getResourceAsStream("/META-INF/config.properties"));
+			resource.load(Environment.class.getResourceAsStream("/META-INF/config.properties"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -36,7 +36,7 @@ public class GatewayEnvironment {
 
 	private static void parseRouteTable() {
 		resource.keySet().stream()
-				.filter(k -> k.toString().startsWith("route"))
+				.filter(k -> k.toString().startsWith("route.uri"))
 				.forEach(k -> routeTable.put(k.toString(), resource.get(k).toString()));
 	}
 
