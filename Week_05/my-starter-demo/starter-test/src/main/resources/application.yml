@@ -1,0 +1,8 @@
+user:
+  config:
+    enabled: true
+    id: userIdXXX
+    name: charlie
+    course:
+      id: 1
+      name: 数学
