@@ -1,0 +1,57 @@
+simple:
+  dataSources:
+    master:
+      -
+        url: jdbc:mysql://192.168.1.104:3306/java01?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+        user: root
+        password: root
+    slave:
+      -
+        url: jdbc:mysql://192.168.1.105:3306/java01?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+        user: root
+        password: root
+
+# ShardingJdbc使用数据源
+sharding:
+  dataSources:
+    master:
+      url: jdbc:mysql://192.168.1.104:3306/java01?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+      user: root
+      password: root
+    slave:
+      url: jdbc:mysql://192.168.1.105:3306/java01?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+      user: root
+      password: root
+
+spring:
+  shardingsphere:
+    datasource:
+      names:
+        master,slave
+      # 主数据源
+      master:
+        type: com.mysql.cj.jdbc.MysqlDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.1.104:3306/java01?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+        username: root
+        password: root
+      # 从数据源
+      slave:
+        type: com.mysql.cj.jdbc.MysqlDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.1.105:3306/java01?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+        username: root
+        password: root
+    masterslave:
+      # 读写分离配置
+      load-balance-algorithm-type: round_robin
+      # 最终的数据源名称
+      name: dataSource
+      # 主库数据源名称
+      master-data-source-name: master
+      # 从库数据源名称列表，多个逗号分隔
+      slave-data-source-names: slave
+    props:
+      # 开启SQL显示，默认false
+      sql:
+        show: true
