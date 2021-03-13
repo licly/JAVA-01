@@ -1,0 +1,21 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: order-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/java0?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    hikari:
+      username: root
+      password: root
+
+dubbo:
+  application.name: order-service
+  registry.address: zookeeper://127.0.0.1:2181
+  consumer.timeout: 1000
+  consumer:
+    retries: 1
+
+hmily.support.rpc.annotation: true
