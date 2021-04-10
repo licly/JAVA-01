@@ -1,5 +1,4 @@
 spring:
   redis:
-    host: 123.56.57.27
-    port: 6379
-    password: wsxzaq.
+    host: 6379
+    password: 
